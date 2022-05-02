@@ -25,10 +25,12 @@ RSpec.describe Player do
     end
 
     context "when player has no cards left" do
-      let(:remove_card) { player.deck.remove_card }
+      # let(:remove_card) { player.deck.remove_card }
 
-      it "returns true" do
-        expect(player.deck).to receive(:remove_card).exactly(player.deck.cards.count).times
+      it "returns true" do # TODO: refactor
+        3.times do
+          player.deck.remove_card
+        end
         expect(player.has_lost?).to be(true)
       end
     end
