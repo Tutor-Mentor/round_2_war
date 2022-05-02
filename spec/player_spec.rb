@@ -1,4 +1,4 @@
-require 'rspec' # 7:30pm 5/2/22 start again
+require 'rspec'
 require './lib/card'
 require './lib/deck'
 require './lib/player'
