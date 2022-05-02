@@ -14,6 +14,14 @@ RSpec.describe Deck do
     expect(deck.cards).to eq(cards)
   end
 
+  # context "when no cards are provided" do
+  #   let(:cards) {  }
+  #
+  #   it "creates deck with empty array" do
+  #     expect(deck.cards).to eq([])
+  #   end
+  # end
+
   describe "#rank_of_card_at" do
     it "returns the rank of card at provided index" do
       expect(deck.rank_of_card_at(0)).to eq(card1.rank)
