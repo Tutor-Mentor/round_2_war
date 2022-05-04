@@ -19,6 +19,7 @@ RSpec.describe Turn do
   let(:player1) { Player.new("Megan", deck1) }
   let(:player2) { Player.new("Aurora", deck2) }
 
+  # TODO: refactor using shared_context and shared_examples
   # shared_context ":war" do
   #   let(:deck2) { Deck.new([card4, card3, card6, card7]) }
   # end
@@ -74,7 +75,7 @@ RSpec.describe Turn do
       #   for a :basic turn, each player will send one card (the top card) to the spoils pile
       it "each player will send one card (the top card) to the spoils pile" do
         turn.pile_cards
-        expect(turn.spoils_of_war).to eq([card1, card3])
+        expect(turn.spoils_of_war).to include(card1, card3)
       end
     end
 
@@ -88,7 +89,10 @@ RSpec.describe Turn do
     end
 
     context ":mutually_assured_destruction" do
-      # for a :mutually_assured_destruction turn, each player will remove three cards from play (the top three cards in their deck). T
+      # for a :mutually_assured_destruction turn, each player will remove three cards from play (the top three cards in their deck).
+      let(:card3) { Card.new(:spade, 'Jack', 11) }
+      let(:card6) { Card.new(:spade, '8', 8) }
+
       it "each player will remove three cards from play (the top three cards in their deck)" do
         # These cards are not sent to the spoils pile, they are simply removed from each players’ deck.
         turn.pile_cards
@@ -100,10 +104,37 @@ RSpec.describe Turn do
 
   describe "#award_spoils" do
     # this method will add each of the cards in the @spoils_of_war array to the winner of the turn.
-    it "adds each of the cards in the @spoils_of_war array to the winner of the turn" do
-      winner = turn.winner
-      turn.award_spoils(winner)
-      expect(player1.deck).to include(card1, card3)
+    context ":basic" do
+      it "adds each of the cards in the @spoils_of_war array to the winner of the turn" do
+        winner = turn.winner
+        turn.pile_cards
+        turn.award_spoils(winner)
+        expect(player1.deck.cards).to include(card1, card3)
+      end
+    end
+
+    context ":war" do
+      let(:card3) { Card.new(:spade, 'Jack', 11) }
+
+      it "adds each of the cards in the @spoils_of_war array to the winner of the turn" do
+        winner = turn.winner
+        turn.pile_cards
+        turn.award_spoils(winner)
+        expect(player2.deck.cards).to include(card1, card2, card3, card4, card5, card6)
+      end
+    end
+
+    context ":mutually_assured_destruction" do
+      let(:card3) { Card.new(:spade, 'Jack', 11) }
+      let(:card6) { Card.new(:spade, '8', 8) }
+
+      it "does not award any card since there is no winner" do
+        winner = turn.winner
+        turn.pile_cards
+        expect(turn.spoils_of_war).to eq([])
+        expect(player1.deck.cards.count).to eq(1)
+        expect(player2.deck.cards.count).to eq(1)
+      end
     end
   end
 end

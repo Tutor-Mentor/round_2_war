@@ -1,4 +1,5 @@
 class Turn
+  # TODO: refactor type, winner, and pile_cards
   attr_accessor :player1, :player2, :spoils_of_war
 
   def initialize(player1, player2)
@@ -31,6 +32,21 @@ class Turn
   end
 
   def pile_cards
-    
+    if type == :basic
+      @spoils_of_war << @player1.deck.cards.first
+      @spoils_of_war << @player2.deck.cards.first
+    elsif type == :war
+      @spoils_of_war << @player1.deck.cards.first(3)
+      @spoils_of_war << @player2.deck.cards.first(3)
+      @spoils_of_war.flatten! # used a bang because it was not persisting when turn.spoils_of_war was called
+    elsif type == :mutually_assured_destruction
+      @player1.deck.cards.slice!(0..2)
+      @player2.deck.cards.slice!(0..2)
+      @spoils_of_war
+    end
+  end
+
+  def award_spoils(winning_player)
+    (winning_player.deck.cards << @spoils_of_war).flatten!
   end
 end
