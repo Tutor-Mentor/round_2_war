@@ -17,7 +17,6 @@ elsif user_input == 'GO'
   Game.start
 end
 
-# TODO: consider movin everything below and what's missing to the Game.start
 # Turn 1: Megan won 2 cards
 # Turn 2: WAR - Aurora won 6 cards
 # Turn 3: *mutually assured destruction* 6 cards removed from play

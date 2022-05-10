@@ -3,7 +3,27 @@ class Game
 
     def start
       setup_game
-      
+      turn_number = 0
+
+      until turn_number = 1000 || @player1.deck.cards.empty? || @player2.deck.cards.empty?
+        turn = Turn.new(@player1, @player2)
+        if turn.type == :basic
+          p "Turn #{turn_number + 1}: #{turn.winner} has won #{turn.spoils_of_war} cards"
+          turn.pile_cards
+          turn.award_spoils(turn.winner)
+          sleep(2)
+        elsif turn.type == :war
+          p "Turn #{turn_number + 1}: #{(turn.type).to_s.upcase} - #{turn.winner} won #{turn.spoils_of_war}"
+          turn.pile_cards
+          turn.award_spoils(turn.winner)
+          sleep(2)
+
+        elsif turn.type == :mutually_assured_destruction
+          p "Turn #{turn_number + 1}: *#{(turn.type).to_s}* 6 cards removed from play"
+          sleep(2)
+          
+        end
+      end
     end
 
     def create_cards
